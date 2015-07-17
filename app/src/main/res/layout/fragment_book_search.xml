@@ -16,7 +16,8 @@
             android:layout_toLeftOf="@+id/button"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:hint="책 이름 / 저자 / ISBN"/>
+            android:hint="책 이름 / 저자 / ISBN"
+            android:singleLine="true"/>
 
         <Button
             android:layout_width="wrap_content"
