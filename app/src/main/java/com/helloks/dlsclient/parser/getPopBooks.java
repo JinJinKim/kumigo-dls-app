@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by helloks on 15. 6. 14.
- */
 public class getPopBooks extends AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
 
     @Override

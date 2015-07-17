@@ -13,9 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by helloks on 15. 6. 14.
- */
+
 public class SearchDLS extends AsyncTask<String, Void, ArrayList<HashMap<String, String>>> {
 
     @Override
@@ -56,7 +54,7 @@ public class SearchDLS extends AsyncTask<String, Void, ArrayList<HashMap<String,
                 Element detail = tr_now.getAllElements(HTMLElementName.TD).get(0);
                 Element detail_id = detail.getAllElements(HTMLElementName.A).get(0);
 
-                semi_result.put("ItemID", detail_id.getAttributeValue("onclick"));
+                semi_result.put("ItemID", detail_id.getAttributeValue("onclick").replaceAll("\\D", "")); //regex 하지 않으면 javaSctipt 명령어가 나옴
                 semi_result.put("ItemName", detail_id.getContent().getTextExtractor().toString());
                 semi_result.put("ItemDetail", tr_now.getAllElements(HTMLElementName.TD).get(1).getContent().getTextExtractor().toString());
 

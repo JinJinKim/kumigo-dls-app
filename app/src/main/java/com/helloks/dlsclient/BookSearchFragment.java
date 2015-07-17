@@ -3,9 +3,11 @@ package com.helloks.dlsclient;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -13,6 +15,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.helloks.dlsclient.parser.SearchDLS;
+import com.helloks.dlsclient.parser.getBook;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +25,6 @@ public class BookSearchFragment extends ListFragment {
     public static final String TAG = "search";
 
     EditText search_param;
-    ListView search_result_lv;
     SimpleAdapter lv_adapter;
     ArrayList<HashMap<String, String>> lv_content = new ArrayList<>();
     Button.OnClickListener listener = new View.OnClickListener() {
@@ -33,7 +35,7 @@ public class BookSearchFragment extends ListFragment {
 
                     String keyword = search_param.getText().toString();
 
-                    if (keyword != null && keyword.length() != 0) {
+                    if (keyword.length() != 0) {
 
                         String[] params = {search_param.getText().toString()};
                         new SearchDLS() {
@@ -84,16 +86,43 @@ public class BookSearchFragment extends ListFragment {
     }
 
     @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+
+        String[] params = {lv_content.get(position).get("ItemID")};
+
+        new getBook() {
+
+            ProgressDialog pDialog;
+
+            protected void onPreExecute() {
+                super.onPreExecute();
+                pDialog = ProgressDialog.show(getActivity(), null, "책 정보를 받아오는 중입니다", true, false);
+            }
+
+            protected void onPostExecute(ArrayList<String> result) {
+                pDialog.dismiss();
+
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+                builderSingle.setTitle("책 정보");
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item);
+                arrayAdapter.addAll(result);
+                builderSingle.setAdapter(arrayAdapter, null);
+                builderSingle.show();
+
+            }
+        }.execute(params);
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Button search_btn = (Button) view.findViewById(R.id.button);
         search_btn.setOnClickListener(listener);
         search_param = (EditText) view.findViewById(R.id.bookName);
-        search_result_lv = getListView();
 
         lv_adapter = new SimpleAdapter(getActivity(), lv_content, android.R.layout.simple_list_item_2, new String[]{"ItemName", "ItemDetail"}, new int[]{android.R.id.text1, android.R.id.text2});
-        search_result_lv.setAdapter(lv_adapter);
+        setListAdapter(lv_adapter);
 
         if (savedInstanceState != null) {
             lv_content.addAll((ArrayList<HashMap<String, String>>) savedInstanceState.getSerializable("content"));
