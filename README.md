@@ -1,5 +1,10 @@
 구미고등학교 도서관
 ==========
+<a href="https://play.google.com/store/apps/details?id=com.helloks.dlsclient">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/ko_generic_rgb_wo_45.png" />
+</a>
+
 경북 구미시에 위치한 구미고등학교의 도서관을 쉽게 이용할 수 있는 어플리케이션입니다.
 
 기능
